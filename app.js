@@ -9,6 +9,7 @@ const COMPILE = Symbol('compile');
 module.exports = app => {
   const defaultLayout = app.config.handlebars.defaultLayout;
   const layoutsPath = app.config.handlebars.layoutsPath;
+  const isExistLayoutsPath = await fs.exists(layoutsPath);
   const partials = loadPartial(app);
   if (partials) {
     for (const key of Object.keys(partials)) {
@@ -25,13 +26,12 @@ module.exports = app => {
       const body = await this[COMPILE](viewContent, context, options);
       let layout = context.layout;
       if (layout === false || !defaultLayout) return body;
-
       layout = layout ? layout : defaultLayout;
-
-      const isExistLayoutsPath = await fs.exists(layoutsPath);
       if (isExistLayoutsPath) {
-        const layoutContent = await fs.readFile(path.join(layoutsPath,`${layout}.hbs`), 'utf-8');
-        return this[COMPILE](layoutContent, Object.assign({}, context, { body }), options);
+         const layoutContent = await fs.readFile(path.join(layoutsPath,`${layout}.hbs`), 'utf-8');
+         return this[COMPILE](layoutContent, Object.assign({}, context, { body }), options);
+       }else{
+         return body;
        }
     }
 
