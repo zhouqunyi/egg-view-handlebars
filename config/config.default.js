@@ -28,6 +28,6 @@ module.exports = appInfo => ({
     ignoreStandalone: true,
     partialsPath: path.join(appInfo.baseDir, 'app/view/partials'),
     layoutsPath: path.join(appInfo.baseDir, 'app/view/layouts'),
-    defaultLayout: 'layout.hbs'
+    defaultLayout: 'layout'
   },
 });
